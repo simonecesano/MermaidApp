@@ -34,12 +34,6 @@
     <div id="output"></div>
   </div>       
     <script>
-    // window.onhashchange = function(e){
-    // 	console.log(e);
-    // };
-
-
-
 $(function(){
     var input = document.getElementById("input");
     var preview = document.getElementById("preview");
