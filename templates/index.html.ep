@@ -66,17 +66,22 @@ $(function(){
 	.on({
 	    'saveversion': function () {
 		console.log('save version');
-		$.post("<%= url_for('/' . param('md5')) %>", { mermaid: $('#input').val() })
-		    .done(function() {
+
+		var url = "<%= url_for('/' . param('md5')) %>";
+		$.post(url, { mermaid: $('#input').val() })
+		    .done(function(d) {
+			if (d.redirect) {
+			    window.location.href = d.redirect
+			}
 			$("#errors").html('');
 		    })
 		    .fail(function(d) {
-			console.log(d.responseJSON.message)
-			$("#errors").html('Save error: ' + d.responseJSON.message);
+			console.log(d)
+			// $("#errors").html('Save error: ' + d.responseJSON.message);
 		    })
 		    .always(function() {
+			location.href = '#' 
 		    });
-		router.navigate('');
 	    },
 	    'savesvg': function () {
 		var svgElement = d3.select("svg")
@@ -97,7 +102,7 @@ $(function(){
 		    .node().outerHTML;
 		var blob = new Blob([html], {type: "image/svg+xml"});
 		saveAs(blob, 'foobar.svg');
-		router.navigate('');
+		location.href = '#' 
 	    }
 	})
     
