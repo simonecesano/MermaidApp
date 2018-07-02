@@ -1,0 +1,32 @@
+% layout 'default';
+<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js"></script>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-10 offset-1">
+      %= include 'components/navbar'
+    </div>
+    <div id="content" class="col-10 offset-1">
+# Credits #
+      
+## Icons ##
+
+- [flow](https://thenounproject.com/icon/1360482/) by Popular from the Noun Project for the app logo
+- [Font Awesome](https://fontawesome.com/) for all the icons
+
+## Libraries ##
+
+- [Mermaid](https://mermaidjs.github.io/) for the diagramming
+- [Boostrap](https://getbootstrap.com/) for the formatting
+- [Showdown](http://showdownjs.com/) for markdown conversion
+      
+    </div>
+  </div>
+</div>
+<script>
+  $(function(){
+      var converter = new showdown.Converter();  
+      var html = converter.makeHtml($('#content').html());
+      console.log(html);
+      $('#content').html(html)
+  })
+</script>
