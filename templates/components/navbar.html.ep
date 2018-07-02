@@ -13,8 +13,8 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="<%= url_for('/new') %>">new diagram</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#!savesvg">download as SVG</a>
-          <a class="dropdown-item" href="#!saveversion">save version on server</a>
+          <a class="dropdown-item" href="#savesvg">download as SVG</a>
+          <a class="dropdown-item" href="#saveversion">save version on server</a>
         </div>
       </li>
       <!-- <li class="nav-item"> -->
