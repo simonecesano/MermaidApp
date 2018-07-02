@@ -1,5 +1,6 @@
 % layout 'default';
 %= javascript "https://fastcdn.org/FileSaver.js/1.1.20151003/FileSaver.min.js"
+<script src="/static/ancora.js"></script>
 <link rel="stylesheet" href="https://cdn.rawgit.com/knsv/mermaid/0.5.8/dist/mermaid.css">
 <script src="https://cdn.rawgit.com/knsv/mermaid/0.5.8/dist/mermaidAPI.js"></script>
     <script src="https://cdn.rawgit.com/yWorks/jsPDF/e71f0a63/dist/jspdf.min.js"></script>
@@ -60,25 +61,22 @@ $(function(){
     }
     renderFunction.call()
 
-    var root = null;
-    var useHash = false; // Defaults to: false
-    var hash = '#!'; // Defaults to: '#'
-    var router = new Navigo(root, useHash, hash);
-    router
+    var ancora = new Ancora;
+    ancora
 	.on({
 	    'saveversion': function () {
 		console.log('save version');
-		// $.post("<%= url_for('/' . param('md5')) %>", { mermaid: $('#input').val() })
-		//     .done(function() {
-		// 	$("#errors").html('');
-		//     })
-		//     .fail(function(d) {
-		// 	console.log(d.responseJSON.message)
-		// 	$("#errors").html('Save error: ' + d.responseJSON.message);
-		//     })
-		//     .always(function() {
-		//     });
-		router.navigate('/');
+		$.post("<%= url_for('/' . param('md5')) %>", { mermaid: $('#input').val() })
+		    .done(function() {
+			$("#errors").html('');
+		    })
+		    .fail(function(d) {
+			console.log(d.responseJSON.message)
+			$("#errors").html('Save error: ' + d.responseJSON.message);
+		    })
+		    .always(function() {
+		    });
+		router.navigate('');
 	    },
 	    'savesvg': function () {
 		var svgElement = d3.select("svg")
@@ -99,24 +97,6 @@ $(function(){
 		    .node().outerHTML;
 		var blob = new Blob([html], {type: "image/svg+xml"});
 		saveAs(blob, 'foobar.svg');
-		router.navigate('');
-	    },
-	    'savepdf': function(){
-		const svgElement = d3.select("svg");
-		
-		var bbox = svgElement.node().getBBox()
-		console.log(svgElement.node().getBBox())
-		const width = bbox.width, height = bbox.height;
-		
-		const pdf = new jsPDF('l', 'pt', [width, height]);
-		
-		svg2pdf(svgElement.node(), pdf, {
-		    xOffset: 0,
-		    yOffset: 0,
-		    scale: 7.2
-		});
-		
-		pdf.save('mermaid.pdf');
 		router.navigate('');
 	    }
 	})
