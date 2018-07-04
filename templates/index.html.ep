@@ -2,9 +2,10 @@
 %= javascript "https://fastcdn.org/FileSaver.js/1.1.20151003/FileSaver.min.js"
 <script src="/static/ancora.js"></script>
 <link rel="stylesheet" href="https://cdn.rawgit.com/knsv/mermaid/0.5.8/dist/mermaid.css">
-<script src="https://cdn.rawgit.com/knsv/mermaid/0.5.8/dist/mermaidAPI.js"></script>
-    <script src="https://cdn.rawgit.com/yWorks/jsPDF/e71f0a63/dist/jspdf.min.js"></script>
-    <script src="https://cdn.rawgit.com/yWorks/svg2pdf.js/0a2fa7ce/dist/svg2pdf.js"></script>
+<script src="https://unpkg.com/mermaid@8.0.0-rc.8/dist/mermaid.min.js"></script>
+<script src="https://cdn.rawgit.com/yWorks/jsPDF/e71f0a63/dist/jspdf.min.js"></script>
+<script src="https://cdn.rawgit.com/yWorks/svg2pdf.js/0a2fa7ce/dist/svg2pdf.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.min.js"></script>
 <style>
   * { font-family: adihaus }
   .navbar { margin-bottom: 12px }
@@ -39,19 +40,33 @@ $(function(){
     var preview = document.getElementById("preview");
     var output = document.getElementById("output");
     var renderBtn = document.getElementById("render");
-    
-    mermaidAPI.initialize({startOnLoad: false, logLevel: 4, cloneCssStyles: true });
-    mermaidAPI.parseError = function(){
+
+    var mermaidText = "";
+
+    mermaid.initialize({
+	startOnLoad: false,
+	logLevel: 4,
+	cloneCssStyles: true
+    });
+    parseError = function(){
 	var args = Array.prototype.slice.call(arguments);
 	preview.innerHTML = args[0];
     }
     
     var renderFunction = function() {
 	var needsUniqueId = "render" + (Math.floor(Math.random() * 10000)).toString();
-	
-	mermaidAPI.render(needsUniqueId, input.value, function(svgCode) {
-	    output.innerHTML = svgCode;
-	});
+	if (input.value != mermaidText) {
+	    console.log('render')
+	    mermaidText = input.value
+	    try {
+		preview.innerHTML = 'All OK';
+		mermaid.render(needsUniqueId, input.value, function(svgCode) {
+		    output.innerHTML = svgCode;
+		});
+	    } catch(error) {
+		preview.innerHTML = error;
+	    }
+	}
     }
     renderFunction.call()
 
@@ -83,7 +98,6 @@ $(function(){
 		// this is for silly Illustrator
 		// who does not draw a line after a marker
 		svgElement.selectAll("[marker-end]").each(function(e, i){
-		    console.log(this);
 		    var new_node = this.cloneNode();
 		    new_node.removeAttribute('marker-end');
 		    this.parentNode.insertBefore(new_node, this);
@@ -102,9 +116,8 @@ $(function(){
     
     
     window.setInterval(function(){
-	preview.innerHTML = "All OK";
 	renderFunction.call()
-    }, 2000);
+    }, 500);
     
 })
 </script>
